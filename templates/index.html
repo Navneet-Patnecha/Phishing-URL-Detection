@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Phishing Detection App</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Phishing Detection App</h1>
+        <form method="POST" action="/">
+            <input class="input-field" type="text" name="url" placeholder="Enter URL">
+            <button class="input-field" type="submit">Check</button>
+        </form>
+        {% if result %}
+            <p class="result">{{ result }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
