@@ -69,9 +69,9 @@ class FeatureExtraction:
         self.features.append(self.LinksPointingToPage())
         self.features.append(self.StatsReport())
 
-    # Rest of the methods...
 
-    # Define other methods here...
+
+    #extracting features here
 
     # 1. UsingIp
     def UsingIp(self):

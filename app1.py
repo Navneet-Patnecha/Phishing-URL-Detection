@@ -37,6 +37,7 @@ from urllib.parse import urlparse
 class FeatureExtraction:
     def __init__(self, url):
         self.features = []
+        self.features_reason = []
         self.url = url
         self.domain = ""
         self.whois_response = ""
@@ -62,35 +63,255 @@ class FeatureExtraction:
             pass
 
         self.features.append(self.UsingIp())
+        if self.features[0] == -1:
+            self.features_list.append("Using IP")
+        '''
+        ip_address  = self.UsingIp()
+        self.features.append(ip_address)
+        if ip_address == -1 :
+            self.features_reason.append("Using Ip Address in URl)
+        
+        '''
         self.features.append(self.longUrl())
+        '''
+        long_url = self.longUrl()
+        self.features.append(long_url)
+        if long_url == -1:
+            self.features_reason.append("Long URL)
+        if long_url == 0:
+            self.features.append("suspicious")
+    
+        '''
         self.features.append(self.shortUrl())
+        '''
+        short_url = self.shortUrl()
+        self.features.append(short_url)
+        if short_url == -1:
+            self.features_reason.append("contains short url services")
+        
+        '''
         self.features.append(self.symbol())
+        '''
+        symbols = self.symbol()
+        self.features.append(symbols)
+        if symbols == -1 :
+            self.features_reason.append("Having @ symbol")
+        '''
         self.features.append(self.redirecting())
+        '''
+        redirection = self.redirecting()
+        self.features.append(redirection)
+        if redirection == -1 :
+            self.features_reason.append("redirection using //")
+        '''
         self.features.append(self.prefixSuffix())
+        '''
+        presuf = self.prefixSuffix()
+        self.features.append(presuf)
+        if presuf == -1 :
+            self.features_reason.append("suffix being used")
+        '''
         self.features.append(self.SubDomains())
+        '''
+        sub_domains = self.SubDomains()
+        self.features.append(sub_domains)
+        if sub_domains == -1 :
+            self.features_reason.append("multiple sub domains")
+        if sub_domains == 0:
+            self.features_reason.append("suspicious in terms of multiple sub-domain)
+        '''
         self.features.append(self.Hppts())
+        '''
+        https_ = self.Hppts()
+        self.features.append(https_)
+        if https_== -1 :
+            self.features_reason.append("using http")
+        '''
         self.features.append(self.DomainRegLen())
+        '''
+        registeration = self.DomainRegLen()
+        self.features.append(registeration)
+        if registeration == -1 :
+            self.features_reason.append("domain expiring in less than a year")
+        '''
         self.features.append(self.Favicon())
+        '''
+        favicon = self.Favicon()
+        self.features.append(favicon)
+        if favicon == -1 :
+            self.features_reason.append("Favicon loaded from external domain")
+        '''
         self.features.append(self.NonStdPort())
+        '''
+        ports = self.NonStdPort()
+        self.features.append(ports)
+        if ports == -1 :
+            self.features_reason.append("Non-standard ports are open")
+        '''
         self.features.append(self.HTTPSDomainURL())
+        '''
+        https_domain_url = self.HTTPSDomainURL()
+        self.features.append(https_domain_url)
+        if https_domain_url == -1:
+            self.features_reason.append("https in domain URL")
+
+        '''
         self.features.append(self.RequestURL())
+        '''
+        request_url = self.redirecting()
+        self.features.append(request_url)
+        if request_url == -1 :
+            self.features_reason.append("heavily requesting from other domains")
+        if request_url == 0:
+            self.features_reason.append("suspicious in terms of request %")
+        '''
         self.features.append(self.AnchorURL())
+        '''
+        anchor_url = self.AnchorURL()
+        self.features.append(anchor_url)
+        if anchor_url == -1:
+            self.features_reason.append("% of url of anchor > 67%.")
+        if anchor_url == 0:
+            self.features_reason.append("suspicious in terms of % or url of anchor.")
+        '''
         self.features.append(self.LinksInScriptTags())
+        '''
+        script_tags_links = self.LinksInScriptTags()
+        self.features.append(script_tags_links)
+        if script_tags_links == -1 :
+            self.features_reason.append("script tags (81%) is redirecting you to different domain.")
+        if script_tags_links == 0:
+            self.features_reason.append("Suspicious script tags leading to another website")
+        '''
         self.features.append(self.ServerFormHandler())
+        '''
+        form_handler = self.ServerFormHandler()
+        self.features.append(form_handler)
+        if form_handler == -1 :
+            self.features_reason.append("SFH is "about: blank" Or Is Empty")
+        if form_handler == 0:
+            self.features_reason.append("suspicious as SFH Refers To A Different Domain ")
+        '''
         self.features.append(self.InfoEmail())
+        '''
+        email_info = self.InfoEmail()
+        self.features.append(email_info)
+        if email_info == -1 :
+            self.features_reason.append("Using "mail()" or "mailto:" Function to Submit User Information")
+        
+        '''
         self.features.append(self.AbnormalURL())
+        '''
+        abnormal_url = self.AbnormalURL()
+        self.features.append(abnormal_url)
+        if abnormal_url == -1 :
+            self.features_reason.append("The Host Name Is Not Included In URL")
+        
+        '''
         self.features.append(self.WebsiteForwarding())
+        '''
+        website_forwarding = self.WebsiteForwarding()
+        self.features.append(website_forwarding)
+        if website_forwarding == -1 :
+            self.features_reason.append("lots of redirection happening here")
+        if website_forwarding == 0:
+            self.features_reason.append("suspicious redirection to different pages")
+        
+        '''
         self.features.append(self.StatusBarCust())
+        '''
+        status_bar = self.StatusBarCust()
+        self.features.append(status_bar)
+        if status_bar == -1 :
+            self.features_reason.append("onMouseOver Changes Status Bar")
+        
+        '''
         self.features.append(self.DisableRightClick())
+        '''
+        right_click = self.DisableRightClick()
+        self.features.append(right_click)
+        if right_click == -1 :
+            self.features_reason.append("Right click disabled")
+        
+        '''
+        
         self.features.append(self.UsingPopupWindow())
+        '''
+        pop_up = self.UsingPopupWindow()
+        self.features.append(pop_up)
+        if pop_up == -1 :
+            self.features_reason.append("Popoup Window Contains Text Fields")
+        
+        '''
         self.features.append(self.IframeRedirection())
+        '''
+        frame_redirection = self.IframeRedirection()
+        self.features.append(frame_redirection)
+        if frame_redirection == -1 :
+            self.features_reason.append("Using IFrame")
+        
+        '''
+        
         self.features.append(self.AgeofDomain())
+        '''
+        age_of_domain= self.AgeofDomain()
+        self.features.append(age_of_domain)
+        if age_of_domain == -1 :
+            self.features_reason.append("Age of domain is short")
+        
+        '''
         self.features.append(self.DNSRecording())
+        '''
+        DNS_recording = self.DNSRecording()
+        self.features.append(DNS_recording)
+        if DNS_recoding == -1 :
+            self.features_reason.append("no DNS Record For The Domain")
+        
+        '''
         self.features.append(self.WebsiteTraffic())
+        '''
+        website_traffic = self.WebsiteTraffic()
+        self.features.append(website_traffic)
+        if website_traffic == -1 :
+            self.features_reason.append("Not recognised by alexa traffic and very low website ranking.")
+        if website_traffic == 0:
+            self.features_reasoning.append("website rank falls into suspicious category")
+        
+        '''
         self.features.append(self.PageRank())
+        '''
+        rank = self.PageRank()
+        self.features.append(rank)
+        if rank == -1 :
+            self.features_reason.append("page rank < 0.2")
+        
+        '''
         self.features.append(self.GoogleIndex())
+        '''
+        google_index = self.GoogleIndex()
+        self.features.append(google_index)
+        if google_index == -1 :
+            self.features_reason.append("Web Page not indexed by google")
+        
+        '''
         self.features.append(self.LinksPointingToPage())
+        '''
+        links_pointing = self.LinksPointingToPage()
+        self.features.append(links_pointing)
+        if links_pointing == -1 :
+            self.features_reason.append("no external link pointing to it")
+        if links_pointing == 0:
+            self.features_reason.append("less than 3 external links are poiting.")
+        
+        '''
         self.features.append(self.StatsReport())
+        '''
+        stats = self.StatsReport()
+        self.features.append(stats)
+        if stats == -1 :
+            self.features_reason.append("Host Belongs to Top Phishing IPs or Top Phishing Domains")
+        
+        '''
 
     # Rest of the methods...
 
@@ -484,6 +705,8 @@ class FeatureExtraction:
 
     def getFeaturesList(self):
         return self.features
+    def getFeaturesReasons(self):
+        return self.features_list
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -492,12 +715,13 @@ def classify_url():
         url = request.form['url']
         feature_extractor = FeatureExtraction(url)
         features = feature_extractor.getFeaturesList()
+        feature_lis = feature_extractor.getFeaturesReasons()
         prediction = model.predict([features])
 
         if prediction[0] == -1:
-            result = "Phishing URL"
+            result = f"Phishing URL + {feature_lis}"
         else:
-            result = "Legitimate URL"
+            result = f"Legitimate URL+ {feature_lis} "
 
         return render_template('index.html', result=result)
 
